@@ -1,0 +1,23 @@
+<h2>Notifications</h2>
+
+{{#if users.length}}
+<ul class="list-group">
+  {{#each users}}
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-lg-8">
+        {{firstname}} {{lastname}}
+      </div>
+      <div class="col-lg-2">
+        <a class="btn btn-success" href="/accept/{{_id}}">Accept</a>
+      </div>
+      <div class="col-lg-2">
+        <a class="btn btn-danger" href="/block/{{_id}}">Block</a>
+      </div>
+    </div>
+  </li>
+  {{/each}}
+</ul>
+{{else}}
+<p>No results</p>
+{{/if}}

@@ -12,15 +12,22 @@
     <a class="navbar-brand" href="/">Friends</a>
     <ul class="nav navbar-nav">
       {{#if user}}
-      <li class="nav-item pull-xs-right">
-        <a class="nav-link" href="/">Dashboard</a>
+      <li class="nav-item">
+        Welcome {{user.firstname}} {{user.lastname}}
       </li>
+
       <li class="nav-item pull-xs-right">
-        <a class="nav-link" href="/users/logout">Logout</a>
+        <a class="nav-link" href="/users/logout"> Logout </a>
       </li>
-      {{else}}
+      {{#if notification}}
       <li class="nav-item pull-xs-right">
-        <a class="nav-link" href="/users/login">Login  </a>
+        <a href="/notification" class="nav-link">
+          <span class="badge badge-danger">{{notification.length}} notifications</span>
+        </a>
+      </li>
+      {{/if}} {{else}}
+      <li class="nav-item pull-xs-right">
+        <a class="nav-link" href="/users/login"> Login  </a>
       </li>
       <li class="nav-item pull-xs-right">
         <a class="nav-link" style="padding-right:10px" href="/users/register"> Register</a>
@@ -30,7 +37,7 @@
   </nav>
   <div class="container">
     <div class="row">
-      <div class="col-lg-6 offset-lg-3">
+      <div class="col-lg-10 offset-lg-1">
         {{#if success_msg}}
         <div class="alert alert-success">{{success_msg}}</div>
         {{/if}} {{#if error_msg}}

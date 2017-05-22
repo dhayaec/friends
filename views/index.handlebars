@@ -1,2 +1,48 @@
- <h2 class="page-header">Dashboard</h2>
-<p>Welcome to your dashboard</p>  
+<h2 class="page-header">Dashboard</h2>
+<p>Welcome to your dashboard</p>
+<div class="col-lg-8">
+  <form action="/">
+    <div class="row">
+      <div class="col-lg-8">
+        <input type="search" placeholder="Search form friends" name="q" class="form-control">
+      </div>
+      <div class="col-lg-4">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </div>
+  </form>
+
+  {{#if users.length}}
+  <ul class="list-group">
+    {{#each users}}
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-lg-8">
+          {{firstname}} {{lastname}}
+        </div>
+        <div class="col-lg-4">
+          <a class="btn btn-primary" href="/addfriend/{{_id}}">Add Friend</a>
+        </div>
+      </div>
+    </li>
+    {{/each}}
+  </ul>
+  {{else}}
+  <p>No results</p>
+  {{/if}}
+</div>
+<div class="col-lg-4">
+  <a href="/createroom" class="btn btn-primary">Create Room</a>
+  <h5>Friends List</h5>
+  {{#if friends.length}}
+  <ul class="list-group">
+    {{#each friends}}
+    <li class="list-group-item">
+      {{firstname}} {{lastname}}
+    </li>
+    {{/each}}
+  </ul>
+  {{else}}
+  <p>No friends</p>
+  {{/if}}
+</div>

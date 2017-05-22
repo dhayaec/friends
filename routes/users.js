@@ -1,166 +1,103 @@
-var express = require('express');
-var router = express.Router();
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
+const express = require('express');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const User = require('../models/user');
 
-var User = require('../models/user');
+const router = express.Router();
 
-// Register
-router.get('/register', function(req, res){
-	res.render('register');
+router.get('/register', (req, res) => {
+  res.render('register');
 });
 
-// Register
-router.get('/register/patient', function(req, res){
-	res.render('patient');
+router.post('/register', (req, res) => {
+  const { email, gender, firstname, lastname, password } = req.body;
+
+  req.checkBody('firstname', 'Firstname is required').notEmpty();
+  req.checkBody('lastname', 'Lastname is required').notEmpty();
+  req.checkBody('email', 'Email is required').notEmpty();
+  req.checkBody('email', 'Email is not valid').isEmail();
+  req.checkBody('password', 'Password is required').notEmpty();
+  req.checkBody('gender', 'Choose your gender').notEmpty();
+
+  const errors = req.validationErrors();
+
+
+  if (errors) {
+    res.render('register', {
+      errors,
+      values: req.body,
+    });
+  } else {
+    const newUser = new User({
+      firstname,
+      lastname,
+      email,
+      gender,
+      password,
+    });
+
+    User.createUser(newUser, (err, user) => {
+      if (err) throw err;
+      console.log(user);
+    });
+
+    req.flash('success_msg', 'You are registered and can now login');
+
+    res.redirect('/users/login');
+  }
 });
 
-// Login
-router.get('/login', function(req, res){
-	res.render('login');
+router.get('/login', (req, res) => {
+  res.render('login');
 });
 
-// Register User
-router.post('/register', function(req, res){
-	var name = req.body.name;
-	var email = req.body.email;
-	var gender=req.body.gender;
-	var member_type=req.body.member_type;
-	var department=req.body.department;
-	var available_date=req.body.available_date;
-	var start_time=req.body.start_time;
-	var end_time=req.body.end_time;
+passport.use(
+  new LocalStrategy((username, password, done) => {
+    User.getUserByUsername(username, (err, user) => {
+      if (err) throw err;
+      if (!user) {
+        return done(null, false, { message: 'Unknown User' });
+      }
 
-	
-	var password = req.body.password;
-	var password2 = req.body.password2;
+      User.comparePassword(password, user.password, (error, isMatch) => {
+        if (error) throw error;
+        if (isMatch) {
+          return done(null, user);
+        }
+        return done(null, false, { message: 'Invalid password' });
+      });
+    });
+  })
+);
 
-	// Validation
-	req.checkBody('name', 'Name is required').notEmpty();
-	req.checkBody('email', 'Email is required').notEmpty();
-	req.checkBody('email', 'Email is not valid').isEmail();
-
-	req.checkBody('password', 'Password is required').notEmpty();
-	req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
-
-	var errors = req.validationErrors();
-
-	if(errors){
-		res.render('register',{
-			errors:errors
-		});
-	} else {
-		var newUser = new User({
-			name: name,
-			email:email,
-			gender:gender,
-			available_date:available_date,
-			start_time:start_time,
-			end_time:end_time,
-			department:department,
-			member_type:member_type,
-			password: password
-		});
-
-		User.createUser(newUser, function(err, user){
-			if(err) throw err;
-			console.log(user);
-		});
-
-		req.flash('success_msg', 'You are registered and can now login');
-
-		res.redirect('/users/login');
-	}
-});
-
-
-router.post('/register/patient', function(req, res){
-	var name = req.body.name;
-	var email = req.body.email;
-		var gender=req.body.gender;
-	var member_type=req.body.member_type;
-	var reason=req.body.reason;
-	var age=req.body.age;
-	var password = req.body.password;
-	var password2 = req.body.password2;
-
-	// Validation
-	req.checkBody('name', 'Name is required').notEmpty();
-	req.checkBody('email', 'Email is required').notEmpty();
-	req.checkBody('email', 'Email is not valid').isEmail();
-
-	req.checkBody('password', 'Password is required').notEmpty();
-	req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
-
-	var errors = req.validationErrors();
-
-	if(errors){
-		res.render('patient',{
-			errors:errors
-		});
-	} else {
-		var newUser = new User({
-			name: name,
-			email:email,
-			age:age,
-			gender:gender,
-			reason:reason,
-			password: password,
-			member_type:member_type
-		});
-
-		User.createUser(newUser, function(err, user){
-			if(err) throw err;
-			console.log(user);
-		});
-
-		req.flash('success_msg', 'You are registered and can now login');
-
-		res.redirect('/users/login');
-	}
-});
-
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-   User.getUserByUsername(username, function(err, user){
-   	if(err) throw err;
-   	if(!user){
-   		return done(null, false, {message: 'Unknown User'});
-   	}
-
-   	User.comparePassword(password, user.password, function(err, isMatch){
-   		if(err) throw err;
-   		if(isMatch){
-   			return done(null, user);
-   		} else {
-   			return done(null, false, {message: 'Invalid password'});
-   		}
-   	});
-   });
-  }));
-
-passport.serializeUser(function(user, done) {
+passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
-  User.getUserById(id, function(err, user) {
+passport.deserializeUser((id, done) => {
+  User.getUserById(id, (err, user) => {
     done(err, user);
   });
 });
 
-router.post('/login',
-  passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true}),
-  function(req, res) {
+router.post(
+  '/login',
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/users/login',
+    failureFlash: true,
+  }),
+  (req, res) => {
     res.redirect('/');
-  });
+  }
+);
 
-router.get('/logout', function(req, res){
-	req.logout();
+router.get('/logout', (req, res) => {
+  req.logout();
 
-	req.flash('success_msg', 'You are logged out');
+  req.flash('success_msg', 'You are logged out');
 
-	res.redirect('/users/login');
+  res.redirect('/users/login');
 });
 
 module.exports = router;
