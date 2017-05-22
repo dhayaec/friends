@@ -1,0 +1,50 @@
+{
+  "editor.fontSize": 15,
+  "editor.tabSize": 2,
+  "editor.fontFamily": "'Operator Mono Book'",
+  "editor.fontLigatures": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/.idea": true,
+    "**/.vscode": true,
+    "**/tmp": true,
+    "**/.history": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/node_modules/**": true,
+    "**/tmp": true
+  },
+  "emmet.syntaxProfiles": {
+    "javascript": "jsx"
+  },
+  "files.associations": {
+    "*.js": "javascript"
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/tmp": true
+  },
+  "files.trimTrailingWhitespace": true,
+  "html.suggest.html5": true,
+  "npm-intellisense.scanDevDependencies": true,
+  "typescript.check.tscVersion": false,
+  "window.zoomLevel": 0,
+  "javascript.validate.enable": false,
+  "extensions.autoUpdate": true,
+  "terminal.integrated.fontSize": 13,
+  "terminal.integrated.cursorBlinking": true,
+  "workbench.welcome.enabled": false,
+  "files.autoSave": "onFocusChange",
+  "prettier.singleQuote": true,
+  "workbench.iconTheme": "vs-seti",
+  "workbench.colorTheme": "Atom One Dark",
+  "git.confirmSync": false,
+  "eslint.autoFixOnSave": true
+}

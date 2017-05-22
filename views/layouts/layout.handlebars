@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>LoginApp</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body>
+  <nav class="navbar navbar-dark bg-primary">
+    <a class="navbar-brand" href="/">Friends</a>
+    <ul class="nav navbar-nav">
+      {{#if user}}
+      <li class="nav-item pull-xs-right">
+        <a class="nav-link" href="/">Dashboard</a>
+      </li>
+      <li class="nav-item pull-xs-right">
+        <a class="nav-link" href="/users/logout">Logout</a>
+      </li>
+      {{else}}
+      <li class="nav-item pull-xs-right">
+        <a class="nav-link" href="/users/login">Login  </a>
+      </li>
+      <li class="nav-item pull-xs-right">
+        <a class="nav-link" style="padding-right:10px" href="/users/register"> Register</a>
+      </li>
+      {{/if}}
+    </ul>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 offset-lg-3">
+        {{#if success_msg}}
+        <div class="alert alert-success">{{success_msg}}</div>
+        {{/if}} {{#if error_msg}}
+        <div class="alert alert-danger">{{error_msg}}</div>
+        {{/if}} {{#if error}}
+        <div class="alert alert-danger">{{error}}</div>
+        {{/if}} {{{body}}}
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
