@@ -38,7 +38,7 @@ router.get('/addfriend/:id', ensureAuthenticated, (req, res) => {
   const { id } = req.params;
   const { _id } = req.user;
   User.addNotification(id, _id, (err, user) => {
-    res.json({ success: true, user });
+    res.redirect('/');
   });
 });
 
