@@ -1,1 +1,18 @@
 <h2>Create Room</h2>
+<div class="col-lg-12">
+  <form action="/createroom" method="post">
+    {{#if friends.length}}
+    <ul class="list-group">
+      {{#each friends}}
+      <li class="list-group-item">
+        {{firstname}} {{lastname}}
+        <input type="checkbox" checked name="friends" value="{{_id}}">
+      </li>
+      {{/each}}
+    </ul>
+    {{else}}
+    <p>No friends</p>
+    {{/if}}
+    <button type="submit" class="btn btn-primary">Create Room</button>
+  </form>
+</div>
